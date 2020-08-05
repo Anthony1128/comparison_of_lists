@@ -5,11 +5,16 @@
 # Список 2: B, C, D, A, F, E, Z, M, N, J, K, L
 
 #ввод двух списков
-list_1 = input().split(', ')
-list_2 = input().split(', ')
+list_1 = '1, 4, 5, 0'
+list_2 = '2, 0, 5, 1, -100'
 
 #функция сравнения
 def comparison(list_1, list_2):
+    list_1 = list_1.split(', ')
+    list_2 = list_2.split(', ')
+    result = []
+
+    #выравниваем второй список по количеству символов если необходимо
     if len(list_1) > len(list_2):
         list_2 += [0]*(len(list_1) - len(list_2))
     
@@ -17,29 +22,60 @@ def comparison(list_1, list_2):
     index = 0
     for item in list_1:
         if item not in list_2:
-            print('{} - этот элемент был удален'.format(item))
+            result.append([item, '- этот элемент был удален'])
         elif item != list_2[index]:
             new_index = list_2.index(item)
             list_2[new_index] = 0
-            print(item, '- сдвинулся на:', new_index - index)
+            result.append([item, '- сдвинулся на: {}'.format(new_index - index)])
         elif item == list_2[index]:
             list_2[index] = 0
-            print(item, '- не поменял позицию')
+            result.append([item, '- не поменял позицию'])
         index += 1
     
     #анализ новых элементов
     index = 0
     for item in list_2:
         if item != 0:
-            print(item, '- добавлен с новым индексом:', index)
+            result.append([item, '- добавлен с новым индексом: {}'.format(index)])
         index += 1
-        
+    
+    return result
 
 #точка входа
-comparison(list_1, list_2)
+result_g = comparison(list_1, list_2)
+print(result_g)
 
+def test_1():
+    list_1 = 'A, B, C, D, E, F, G, H, I, J, K, L, M, N'
+    list_2 = 'B, C, D, A, F, E, Z, M, N, J, K, L'
+    assert comparison(list_1, list_2) == [['A', '- сдвинулся на: 3'], ['B', '- сдвинулся на: -1'], 
+                        ['C', '- сдвинулся на: -1'], ['D', '- сдвинулся на: -1'], 
+                        ['E', '- сдвинулся на: 1'], ['F', '- сдвинулся на: -1'], 
+                        ['G', '- этот элемент был удален'], ['H', '- этот элемент был удален'], 
+                        ['I', '- этот элемент был удален'], ['J', '- не поменял позицию'], 
+                        ['K', '- не поменял позицию'], ['L', '- не поменял позицию'], 
+                        ['M', '- сдвинулся на: -5'], ['N', '- сдвинулся на: -5'], 
+                        ['Z', '- добавлен с новым индексом: 6']]
+def test_2():
+    list_1 = 'A, A, B, B'
+    list_2 = 'B, A, B, A'
+    assert comparison(list_1, list_2) == [['A', '- сдвинулся на: 1'], ['A', '- сдвинулся на: 2'], 
+                        ['B', '- не поменял позицию'], ['B', '- сдвинулся на: -3']]
 
+def test_3():
+    list_1 = ''
+    list_2 = ''
+    assert comparison(list_1, list_2) == [['', '- не поменял позицию']]
 
+def test_4():
+    list_1 = '#, @, $'
+    list_2 = '#, $, $'
+    assert comparison(list_1, list_2) == [['#', '- не поменял позицию'], ['@', '- этот элемент был удален'], 
+                                    ['$', '- не поменял позицию'], ['$', '- добавлен с новым индексом: 1']]
 
-
-
+def test_5():
+    list_1 = '1, 4, 5, 0'
+    list_2 = '2, 0, 5, 1, -100'
+    assert comparison(list_1, list_2) == [['1', '- сдвинулся на: 3'], ['4', '- этот элемент был удален'], 
+                                    ['5', '- не поменял позицию'], ['0', '- сдвинулся на: -2'], 
+                                    ['2', '- добавлен с новым индексом: 0'], ['-100', '- добавлен с новым индексом: 4']]
