@@ -10,40 +10,30 @@ list_2 = input().split(', ')
 
 #функция сравнения
 def comparison(list_1, list_2):
-
-    #определение новых элементов списка и их позиций
-    new_items = []
-    index = 0
-    for item in list_2:
-        if item not in list_1:
-            new_items.append((item, index))
-        index += 1
-
-    #определение удаленных элементов из списка
-    rm_items = []
-    index = 0
-    for item in list_1:
-        if item not in list_2:
-            rm_items.append((item, index))
-        index += 1
-    
     if len(list_1) > len(list_2):
         list_2 += [0]*(len(list_1) - len(list_2))
     
+    #анализ удаленных и поменявших позицию элементов
     index = 0
     for item in list_1:
         if item not in list_2:
-            print(item, 'was deleted')
+            print('{} - этот элемент был удален'.format(item))
         elif item != list_2[index]:
             new_index = list_2.index(item)
             list_2[new_index] = 0
-            print(item, 'has new index', new_index)
+            print(item, '- сдвинулся на:', new_index - index)
         elif item == list_2[index]:
-            print(item, 'didnt change position')
+            list_2[index] = 0
+            print(item, '- не поменял позицию')
         index += 1
-
+    
+    #анализ новых элементов
+    index = 0
+    for item in list_2:
+        if item != 0:
+            print(item, '- добавлен с новым индексом:', index)
+        index += 1
         
-
 
 #точка входа
 comparison(list_1, list_2)
