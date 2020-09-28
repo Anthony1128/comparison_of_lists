@@ -1,6 +1,7 @@
 from task_lists import comparison
 import pytest
 
+
 @pytest.mark.parametrize(
     'list_1, list_2, expected',
     [
@@ -22,7 +23,6 @@ import pytest
                         ['Z', '- добавлен с новым индексом: 6']])
     ]
 )
-
 def test_all(list_1, list_2, expected):
     assert comparison(list_1, list_2) == expected
 
